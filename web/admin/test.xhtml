@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Đăng ký</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml">
+            <ui:define name="content">
+                <p:outputPanel id="opnRegister">
+                    <p:panel id="panelRegister" header="Đăng ký thông tin"> 
+                        <p:focus for="#{registerController.focus}" />
+                        <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                            <p:outputLabel value="Họ và tên" for="name" />
+                            <p:inputText value="#{registerController.user.name}" id="name"  
+                                         required="true" requiredMessage="Họ và tên bắt buộc nhập"
+                                         maxlength="50" styleClass="text-capitalize" >
+                                <p:ajax global="false" event="blur"  />
+                            </p:inputText>
+                            <p:outputLabel value="Tên đăng nhập" for="username" />
+                            <p:inputText value="#{registerController.user.username}" id="username" 
+                                         required="true" requiredMessage="Tên đăng nhập bắt buộc nhập"
+                                         maxlength="15">
+                                <p:ajax global="false" event="blur"  />
+                            </p:inputText>
+                            <p:outputLabel value="Mật khẩu" for="password" />
+                            <p:password value="#{registerController.user.password}" id="password" 
+                                        required="true" requiredMessage="Mật khẩu bắt buộc nhập"
+                                        maxlength="16" >
+                                <p:ajax global="false" event="blur"  />
+                            </p:password>
+                            <p:outputLabel value="Nhập lại mật khẩu" for="rePassword" />
+                            <p:password value="#{registerController.user.rePassword}" id="rePassword" 
+                                        required="true" requiredMessage="Nhập lại mật khẩu bắt buộc nhập"
+                                        maxlength="16">
+                                <p:ajax global="false" event="blur"  />
+                            </p:password>
+                            <p:outputLabel value="Số điện thoại" for="phoneNumber" />
+                            <p:inputText value="#{registerController.user.phoneNumber}" id="phoneNumber"
+                                         maxlength="10" >
+                                <p:keyFilter regEx="/[\d]/"  preventPaste="false"/>  
+                            </p:inputText>
+                            <p:outputLabel value="Email" for="email" />
+                            <p:inputText value="#{registerController.user.email}" id="email" 
+                                         maxlength="50"/>
+                            <p:outputLabel value="Ngày sinh" for="birtDay" />
+                            <p:calendar id="birtDay" value="#{registerController.user.birtDay}" 
+                                        navigator="true" pattern="dd/MM/yyyy" maxdate="#{registerController.sysdate}" />
+                            <p:outputLabel value="Giới tính" for="gender" />
+                            <p:selectOneRadio id="gender" value="#{registerController.user.gender}">
+                                <f:selectItem itemLabel="Nam" itemValue="0" />
+                                <f:selectItem itemLabel="Nữ" itemValue="1" />
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Loại giấy tờ" for="docType" />
+                            <p:selectOneMenu id="docType" value="#{registerController.user.docType}" style="width:100%"
+                                             filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Chọn loại giấy tờ" itemValue="" />
+                                <f:selectItem itemLabel="Chứng minh nhân dân" itemValue="CMND" />
+                                <f:selectItem itemLabel="Căn cước công dân" itemValue="CCCD" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Số giấy tờ" for="idNo" />
+                            <p:inputText value="#{registerController.user.idNo}" id="idNo" />
+                            <p:outputLabel value="Ngày cấp" for="idIssueDate" />
+                            <p:calendar id="idIssueDate" value="#{registerController.user.idIssueDate}" navigator="true" pattern="dd/MM/yyyy" />
+                            <p:outputLabel value="Nơi cấp" for="idIssuePlace" />
+                            <p:inputText value="#{registerController.user.idIssuePlace}" id="idIssuePlace" />
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-10">
+                            <p:outputLabel value="Địa chỉ" for="address" />
+                            <p:inputText value="#{registerController.user.address}" id="address" maxlength="500" />
+                            <p:outputLabel value="Ghi chú" for="address" />
+                            <p:inputTextarea rows="5" cols="50" completeMethod="#{registerController.user.address}" />
+                        </p:panelGrid>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <p:commandButton value="Đồng ý" id="ok" actionListener="#{registerController.handOK()}"  process="@this, form_main:opnRegister" update=":form_main:messages opnRegister"  />
+                                <p:commandButton value="Nhập lại" id="canncel" process="@this" actionListener="#{registerController.resetForm()}" update=":form_main:opnRegister" />
+                            </div>
+                        </div>
+                    </p:panel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

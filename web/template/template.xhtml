@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/css/customer-primerface.css" />
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <style>
+            #logo{
+                font-weight: bold;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div>
+            <ui:insert name="header">
+                <ui:include src="header.xhtml" />
+            </ui:insert>
+        </div>
+        <div>
+            <h:form id="form_main">
+                <p:messages id="messages" showDetail="true" showSummary="false" closable="true" />
+                <p:growl id="growl" showDetail="true" sticky="true"   />  
+                <ui:insert name="content">
+                    <ui:include src="content.xhtml" />
+                </ui:insert>
+            </h:form>
+        </div>
+        <div>
+            <ui:insert name="footer">
+                <ui:include src="footer.xhtml" />
+            </ui:insert>
+        </div>
+    </h:body>
+</html>
+

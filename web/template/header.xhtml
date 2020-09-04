@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <ui:composition>
+            <div id="logo" class="text-info">
+                <h2>ITPLUS-ACADEMY.COM.VN</h2>
+            </div>
+            <h:form id="form_menu">
+                <p:menubar styleClass="bg-info" style="margin-bottom: 10px">
+                    <p:submenu label="Quản trị hệ thống" icon="pi pi-file" >
+                        <p:menuitem value="Trang chủ" action="/pages/home?faces-redirect=true" />
+                        <p:menuitem value="Đăng ký thông tin" action="/admin/register?faces-redirect=true" />
+                        <p:separator />
+                        <p:menuitem value="Thoát" action="#{loginController.handLogout()}" />
+                    </p:submenu>
+
+                    <p:submenu label="Danh mục" icon="pi pi-pencil">
+                        <p:menuitem value="Undo" url="#" icon="pi pi-angle-double-left" />
+                        <p:menuitem value="Redo" url="#" icon="pi pi-angle-double-right" />
+                    </p:submenu>
+
+                    <p:submenu label="Báo cáo" icon="pi pi-question">
+                    </p:submenu>
+
+
+                    <f:facet name="options">
+                        <h:outputLabel value="Xin chào: #{loginController.user.username}" />
+                    </f:facet>
+                </p:menubar>
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>
+

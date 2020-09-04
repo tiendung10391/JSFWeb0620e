@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Đăng nhập</title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/css/bootstrap.css" />
+    </h:head>
+    <h:body>
+        <h:form id="form_login">
+            <div class="container">
+                <div class="row" style="border: 1px solid #040505; width: 400px !important; border-radius: 3px; box-shadow: 2px #495057; margin:  0 auto; margin-top: 50px">
+                    <div class="col-12 bg-warning">
+                        <h2 class="text-white text-center">Đăng nhập</h2>
+                    </div>
+                    <div class="col-12 text-center">
+                        <img src="#{request.contextPath}/resouce/images/logo.png" style="width: 200px; margin: 10px 0"/>
+                    </div>
+                    <div class="col-12">
+                        <span class="ui-float-label">
+                            <p:inputText id="username" value="#{loginController.user.username}" 
+                                         required="true" requiredMessage="Bạn chưa nhập tên đăng nhập" 
+                                         style="width: 100% !important; margin-bottom: 20px" />
+                            <p:outputLabel for="@previous" value="Tên đăng nhập" />
+                        </span>
+                    </div>
+                    <div class="col-12">
+                        <span class="ui-float-label">
+                            <p:password id="nonFeedback" value="#{loginController.user.password}"
+                                        required="true" requiredMessage="Bạn chưa nhập mật khẩu"
+                                        style="width: 100% !important; margin-bottom: 20px" />
+                            <p:outputLabel for="@previous" value="Mật khẩu" />
+                        </span>
+                    </div>
+                    <div class="col-12">
+                        <p:commandButton value="Đăng nhập" action="#{loginController.handLogin()}" styleClass="btn btn-warning" style="width: 100% !important; margin-bottom: 20px" />
+                    </div>
+                    <div class="col-12">
+                        <p:messages id="messages" showIcon="true" showSummary="false" showDetail="true" closable="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
