@@ -38,7 +38,7 @@ public class RegisterController implements Serializable {
     public void handOK() {
         try {
             if (valid()) {
-                MessagesUtils.info("", "Đăng ký thành công");
+                MessagesUtils.info("", "Đăng ký thành công!");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,7 +80,6 @@ public class RegisterController implements Serializable {
         }else {
             MessagesUtils.info("", "Đăng ký thành công");
         }
-
         return false;
     }
     
