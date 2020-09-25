@@ -6,6 +6,7 @@
 package util;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,6 +21,15 @@ public class DateUtils implements Serializable {
         c.setTime(date);
         c.add(Calendar.YEAR, year);
         return c.getTime();
+    }
+
+    public static String convertDate(Date dtDate, String formatDate) throws Exception {
+        if (dtDate == null) {
+            return "";
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat(formatDate);
+            return formatter.format(dtDate);
+        }
     }
 
 }

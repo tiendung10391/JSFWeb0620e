@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public class User implements Serializable {
 
+    private long id;
     private String name;
     private String username;
     private String password;
@@ -28,6 +29,9 @@ public class User implements Serializable {
     private String idIssuePlace;
     private String address;
     private String description;
+    private String chgWho;
+    private Date chgDate;
+    private String status;
 
     public User() {
     }
@@ -142,6 +146,38 @@ public class User implements Serializable {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getChgWho() {
+        return chgWho;
+    }
+
+    public void setChgWho(String chgWho) {
+        this.chgWho = chgWho;
+    }
+
+    public Date getChgDate() {
+        return chgDate;
+    }
+
+    public void setChgDate(Date chgDate) {
+        this.chgDate = chgDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 

@@ -27,7 +27,18 @@
                 <ui:insert name="content">
                     <ui:include src="content.xhtml" />
                 </ui:insert>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Có" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="Không" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                </p:confirmDialog>  
             </h:form>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog id="status_dialog" widgetVar="statusDialog" modal="true"
+                      draggable="false" closable="false" resizable="false"
+                      showHeader="false">
+                <p:graphicImage name="#{request.contextPath}/resouce/images/loading.gif"/>
+            </p:dialog>
         </div>
         <div>
             <ui:insert name="footer">

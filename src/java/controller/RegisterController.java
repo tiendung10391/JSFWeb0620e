@@ -7,11 +7,16 @@ package controller;
 
 import entity.User;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.servlet.http.HttpSession;
+import model.RegisterModel;
 import util.DateUtils;
 import util.MessagesUtils;
+import util.SessionUtils;
 import util.StringUtils;
 
 /**
@@ -25,26 +30,100 @@ public class RegisterController implements Serializable {
     private User user;
     private Date sysdate;
     private String focus;
+    private List<User> mlstUser;
+    private RegisterModel registerModel;
+    private boolean isAdd;
+    private boolean isEdit;
 
     /**
      * Creates a new instance of RegisterController
      */
     public RegisterController() {
-        user = new User();
-        sysdate = new Date();
-        focus = "name";
+        try {
+            isAdd = false;
+            isEdit = false;
+            user = new User();
+            sysdate = new Date();
+            registerModel = new RegisterModel();
+            focus = "name";
+            mlstUser = new ArrayList<>();
+            mlstUser = registerModel.getListUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessagesUtils.error("", e.toString());
+        }
     }
 
     public void handOK() {
         try {
-            if (valid()) {
+            SessionUtils.getRequest();
+            HttpSession session = SessionUtils.getSession();
+            String userLogin = (String) session.getAttribute("username");
+            user.setChgWho(userLogin);
+            user.setChgDate(new Date());
+            user.setStatus("1");
+            if (isAdd) {
+                //thi goi ham them
+                registerModel.add(user);
+                mlstUser.add(0, user);
+                //insert database
                 MessagesUtils.info("", "Chúc mừng bạn đăng ký thành công !!!");
+            } else if (isEdit) {
+                //thi goi ham sua
+                registerModel.update(user);
+                //insert database
+                MessagesUtils.info("", "Chúc mừng bạn sửa thành công !!!");
             }
+
+            handCancel();
         } catch (Exception e) {
             e.printStackTrace();
             MessagesUtils.error("", e.toString());
         }
 
+    }
+
+    public void changeStateAdd() {
+        try {
+            isAdd = true;
+            isEdit = false;
+            user = new User();
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessagesUtils.error("", e.toString());
+        }
+    }
+
+    public void changeStateEdit(User user) {
+        try {
+            isAdd = false;
+            isEdit = true;
+            this.user = user;
+            this.user.setRePassword(this.user.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessagesUtils.error("", e.toString());
+        }
+    }
+
+    public void handCancel() {
+        try {
+            isAdd = false;
+            isEdit = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessagesUtils.error("", e.toString());
+        }
+    }
+    
+    public void handDelete(User user) {
+        try {
+            registerModel.remove(user);
+            mlstUser.remove(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessagesUtils.error("", e.toString());
+        }
     }
 
     public boolean valid() throws Exception {
@@ -60,34 +139,23 @@ public class RegisterController implements Serializable {
             focus = "username";
             MessagesUtils.error("", "Tên đăng nhập không hợp lệ");
             return false;
-        } 
-        else if (!checkPassword()) {
-            focus = "password";
-            MessagesUtils.error("", "Mật khẩu không đúng định dạng");
-            return false;
-        } 
-        else if (!user.getPassword().equals(user.getRePassword())) {
+        } else if (!user.getPassword().equals(user.getRePassword())) {
             MessagesUtils.error("", "Nhập lại mật khẩu không đúng");
             focus = "rePassword";
             return false;
         } else if (!checkEmailOrPhone()) {
             return false;
-        } else if (user.getDocType() != null && user.getBirtDay() != null && user.getBirtDay().after(new Date())) {
-            MessagesUtils.error("", "Ngày sinh lớn hơn ngày hiện tại");
+        } else if (!checkIdNo()) {
             return false;
-        } else if(!checkIdNo()){
-            return false;
-        }else {
-            MessagesUtils.info("", "Đăng ký thành công");
         }
-        return false;
+        return true;
     }
-    
-    public boolean checkPassword(){
+
+    public boolean checkPassword() {
         if (!StringUtils.checkRegex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$", user.getPassword())) {
             MessagesUtils.error("", "Mật khẩu không đúng định dạng");
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -128,7 +196,7 @@ public class RegisterController implements Serializable {
                     MessagesUtils.error("", "Số CCCD không hợp lệ");
                     return false;
                 }
-            } 
+            }
             if (user.getIdIssueDate() == null) {
                 MessagesUtils.error("", "Ngày cấp bắt buộc phải nhập");
                 return false;
@@ -156,8 +224,8 @@ public class RegisterController implements Serializable {
             }
         }
     }
-    
-    public void createEmail(){
+
+    public void createEmail() {
         String email = user.getUsername() + "@gmail.com";
         user.setEmail(email);
     }
@@ -189,7 +257,29 @@ public class RegisterController implements Serializable {
     public void setFocus(String focus) {
         this.focus = focus;
     }
-    
-    
+
+    public List<User> getMlstUser() {
+        return mlstUser;
+    }
+
+    public void setMlstUser(List<User> mlstUser) {
+        this.mlstUser = mlstUser;
+    }
+
+    public boolean isIsAdd() {
+        return isAdd;
+    }
+
+    public void setIsAdd(boolean isAdd) {
+        this.isAdd = isAdd;
+    }
+
+    public boolean isIsEdit() {
+        return isEdit;
+    }
+
+    public void setIsEdit(boolean isEdit) {
+        this.isEdit = isEdit;
+    }
 
 }
