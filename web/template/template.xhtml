@@ -3,11 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/css/customer-primerface.css" />
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <link type="text/css" rel="stylesheet" href="/project/faces/javax.faces.resource/theme.css?ln=primefaces-glass-x" />
         <style>
             #logo{
                 font-weight: bold;
@@ -32,12 +34,20 @@
                     <p:commandButton value="Không" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
                 </p:confirmDialog>  
             </h:form>
+            <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+                <f:facet name="start">
+                    <p:graphicImage value="resouce/images/loading.gif" />
+                </f:facet>
+                <f:facet name="complete">
+                    <h:outputText value="" />
+                </f:facet>
+            </p:ajaxStatus>
             <p:ajaxStatus onstart="PF('statusDialog').show();"
                           onsuccess="PF('statusDialog').hide();"/>
             <p:dialog id="status_dialog" widgetVar="statusDialog" modal="true"
                       draggable="false" closable="false" resizable="false"
                       showHeader="false">
-                <p:graphicImage name="#{request.contextPath}/resouce/images/loading.gif"/>
+                <p:graphicImage value="/resouce/images/loading.gif" />
             </p:dialog>
         </div>
         <div>

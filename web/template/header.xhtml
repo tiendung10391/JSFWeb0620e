@@ -16,7 +16,7 @@
                     <p:submenu label="Quản trị hệ thống" icon="pi pi-file" >
                         <p:menuitem value="Trang chủ" action="/pages/home?faces-redirect=true" />
                         <p:menuitem value="Đăng ký thông tin" action="/admin/register?faces-redirect=true" />
-                        <p:separator />
+                        <p:menuitem value="Danh sách phòng ban" action="/admin/phongBan?faces-redirect=true" />
                         <p:menuitem value="Thoát" action="#{loginController.handLogout()}" />
                     </p:submenu>
 
@@ -25,7 +25,8 @@
                         <p:menuitem value="Redo" url="#" icon="pi pi-angle-double-right" />
                     </p:submenu>
 
-                    <p:submenu label="Báo cáo" icon="pi pi-question">
+                    <p:submenu label="Biểu đồ" icon="pi pi-question">
+                        <p:menuitem value="Biểu đồ hình tròn" action="/admin/pieChart?faces-redirect=true" />
                     </p:submenu>
 
 

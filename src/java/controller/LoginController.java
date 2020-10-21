@@ -48,8 +48,6 @@ public class LoginController {
         }
         return "";
     }
-    
-
 
     public String handLogout() {
         HttpSession session = SessionUtils.getSession();
@@ -63,6 +61,12 @@ public class LoginController {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static String getUserLogin() throws Exception {
+        SessionUtils.getRequest();
+        HttpSession session = SessionUtils.getSession();
+        return  (String) session.getAttribute("username");
     }
 
 }

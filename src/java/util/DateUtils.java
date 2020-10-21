@@ -31,5 +31,13 @@ public class DateUtils implements Serializable {
             return formatter.format(dtDate);
         }
     }
+    
+    public static java.sql.Date getSQLDate(Date dtDate) throws Exception{
+        if(dtDate != null ){
+            return new java.sql.Date(dtDate.getTime());
+        }else{
+            return null;
+        }
+    }
 
 }

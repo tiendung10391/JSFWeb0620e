@@ -109,7 +109,7 @@ public class RegisterModel extends ConnectionUtil {
                 "	birt_day = STR_TO_DATE(?, '%d/%m/%Y'), gender = ?, doc_type = ?, id_no = ?, \n" +
                 "	issue_date = STR_TO_DATE(?, '%d/%m/%Y'), id_issue_place = ?, address = ?, \n" +
                 "	description = ?, chg_who = ?, chg_date = STR_TO_DATE(?, '%d/%m/%Y') \n" +
-                "   where id = ?";
+                "   where id = ? and status  = '1'";
         try {
             open();
             mStmt = mConnection.prepareStatement(strSQL);
@@ -129,7 +129,10 @@ public class RegisterModel extends ConnectionUtil {
             mStmt.setString(14, user.getChgWho());
             mStmt.setString(15, DateUtils.convertDate(user.getChgDate(), "dd/MM/yyyy"));
             mStmt.setLong(16, user.getId());
-            mStmt.executeUpdate();
+            int check = mStmt.executeUpdate();
+            if(check == 0){
+                throw new Exception("Trạng thái cập nhật không hợp lệ");
+            }
         }finally{
             close();
         }

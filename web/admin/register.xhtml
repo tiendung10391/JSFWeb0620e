@@ -82,7 +82,7 @@
 
                                 <p:selectOneMenu id="docType" value="#{registerController.user.docType}" style="width:100%"
                                                  filter="true" filterMatchMode="contains">
-                                    <p:ajax process="@this, :form_main:opnRegister" update=":form_main:opnRegister" />
+                                    <p:ajax process="@this, :form_main:docType" update=":form_main:opnRegister" />
                                     <f:selectItem itemLabel="Chọn loại giấy tờ" itemValue="" />
                                     <f:selectItem itemLabel="Chứng minh nhân dân" itemValue="CMND" />
                                     <f:selectItem itemLabel="Căn cước công dân" itemValue="CCCD" />
@@ -123,7 +123,7 @@
                             </p:panelGrid>
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <p:commandButton value="Đồng ý" id="ok" icon="pi pi-save" actionListener="#{registerController.handOK()}"  process="@this, form_main:opnRegister" update=":form_main:messages :form_main:opnMain"  />
+                                    <p:commandButton value="Đồng ý" id="ok" icon="pi pi-save" actionListener="#{registerController.handOK()}" resetValues="false"  process="@this, form_main:opnRegister" update=":form_main:messages :form_main:opnMain"  />
                                     <p:commandButton value="Quay lại" id="canncel" icon="pi pi-refresh" process="@this" actionListener="#{registerController.handCancel()}" update=":form_main:opnMain" />
                                 </div>
                             </div>

@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Phòng ban</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml">
+            <ui:define name="content">
+                <p:outputPanel id="opnMain" >
+                    <p:outputPanel id="opnList" rendered="#{phongBanController.displayMain()}">
+                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-g-12 ui-md-4 ui-lg-4, ui-g-12 ui-md-8 ui-lg-8" styleClass="ui-panelgrid-blank">
+                            <p:panel header="Danh sách phòng ban">
+                                <p:commandButton value="Thêm" style="margin-bottom: 10px" process="@this" update="opnMain" actionListener="#{phongBanController.changeStateAddPhongBan()}"/>
+
+                                <p:dataTable id="tblListPhongBan" value="#{phongBanController.mlstPhong}" var="entity" rowKey="#{entity.id}" 
+                                             paginator="true" paginatorPosition="bottom"  rows="10"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} của {totalRecords} bản ghi"
+                                             rowsPerPageTemplate="1,5,10,15"
+                                             selectionMode="single" selection="#{phongBanController.phongSelected}">
+                                    <p:ajax event="rowSelect" listener="#{phongBanController.onRowSelect}" 
+                                            update=":form_main:messages :form_main:tblListNhanVien :form_main:addNhanVien" process="@this" />
+                                    <p:column headerText="Thao tác">
+                                        <p:commandLink styleClass="pi pi-pencil" title="Sửa" process="@this" update=":form_main:opnMain" actionListener="#{phongBanController.changeStateEdit(entity)}"/>
+                                        <p:commandLink styleClass="pi pi-clone" title="Copy" process="@this" update=":form_main:opnMain" actionListener="#{phongBanController.changeStateCopy(entity)}"/>
+                                        <p:commandLink styleClass="pi pi-eye" title="Xem" process="@this" update=":form_main:opnMain" actionListener="#{phongBanController.changeStateView(entity)}"/>
+                                        <p:commandLink styleClass="pi pi-trash" title="Xoá" process="@this" update="tblListPhongBan, :form_main:messages" actionListener="#{phongBanController.handDelete(entity)}">
+                                            <p:confirm header="Xác nhận xoá" message="Bạn có muốn xoá không" icon="pi pi-exclamation-triangle" />
+                                        </p:commandLink>
+                                    </p:column>
+                                    <p:column headerText="Mã phòng" sortBy="#{entity.maPhong}" filterBy="#{entity.maPhong}"  filterMatchMode="contains">
+                                        <p:outputLabel value="#{entity.maPhong}" />
+                                    </p:column>
+                                    <p:column headerText="Tên phòng" sortBy="#{entity.tenPhong}" filterBy="#{entity.tenPhong}" filterMatchMode="contains">
+                                        <p:outputLabel value="#{entity.tenPhong}" />
+                                    </p:column>
+                                    <p:column rendered="false" headerText="Chuyên ngành" sortBy="#{phongBanController.getTenChuyenNganh(entity.chuyenNganhId)}" filterBy="#{phongBanController.getTenChuyenNganh(entity.chuyenNganhId)}" filterMatchMode="contains">
+                                        <p:outputLabel value="#{phongBanController.getTenChuyenNganh(entity.chuyenNganhId)}" />
+                                    </p:column>
+                                    <p:column rendered="false" headerText="Trạng thái">
+                                        <p:outputLabel value="Hiệu lực" rendered="#{entity.status eq '1'}" />
+                                        <p:outputLabel value="Hết hiệu lực" rendered="#{entity.status eq '0'}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                            <p:panel header="Danh sách nhân viên">
+                                <p:commandButton value="Thêm" id="addNhanVien" style="margin-bottom: 10px" actionListener="#{phongBanController.changeStateAddNhanVien()}"
+                                                 disabled="#{phongBanController.nhanVien.idPhong eq '0'}"
+                                                 process="@this" update=":form_main:opnMain :form_main:messages "/>
+                                <p:dataTable id="tblListNhanVien" value="#{phongBanController.mlstNhanVien}" var="nv" rowKey="#{nv.id}" 
+                                             paginator="true" paginatorPosition="bottom"  rows="10"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} của {totalRecords} bản ghi"
+                                             rowsPerPageTemplate="1,5,10,15" emptyMessage="Chưa có nhân viên">
+                                    <p:column headerText="Thao tác">
+                                        <p:commandLink styleClass="pi pi-eye" title="Xem" process="@this" update=":form_main:opnMain" actionListener="#{phongBanController.changeStateViewNhanVien(nv)}"/>
+                                    </p:column>
+                                    <p:column headerText="Tên nhân viên" sortBy="#{nv.ten}" filterBy="#{nv.ten}"  filterMatchMode="contains">
+                                        <p:outputLabel value="#{nv.ten}" />
+                                    </p:column>
+                                    <p:column headerText="Địa chỉ" sortBy="#{nv.diaChi}" filterBy="#{nv.diaChi}"  filterMatchMode="contains">
+                                        <p:outputLabel value="#{nv.diaChi}" />
+                                    </p:column>
+                                    <p:column headerText="Ngày sinh" sortBy="#{nv.ngaySinh}" filterBy="#{phongBanController.getNgaySinhView(nv.ngaySinh)}"  filterMatchMode="contains">
+                                        <p:outputLabel value="#{phongBanController.getNgaySinhView(nv.ngaySinh)}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                    <p:outputPanel id="opnDetail" rendered="#{not phongBanController.displayMain()}">
+                        <p:panel header="Thông tin chi tiết phòng ban" rendered="#{phongBanController.isPhongBan}">
+                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel value="Mã phòng" for="maPhong" />
+                                <p:inputText value="#{phongBanController.phongBan.maPhong}" id="maPhong" disabled="#{phongBanController.isView}" required="true" requiredMessage="Mã phòng bắt buộc nhập" />
+
+                                <p:outputLabel value="Tên phòng" for="tenPhong" />
+                                <p:inputText value="#{phongBanController.phongBan.tenPhong}" id="tenPhong" disabled="#{phongBanController.isView}" required="true" requiredMessage="Tên phòng bắt buộc nhập"/>
+
+                                <p:outputLabel value="Chuyên ngành" for="chuyenNganh" />
+                                <p:selectOneMenu id="chuyenNganh" value="#{phongBanController.phongBan.chuyenNganhId}" style="width: 100%"  disabled="#{phongBanController.isView}" required="true" requiredMessage="Chuyên ngành bắt buộc nhập">
+                                    <f:selectItem itemLabel="" itemValue="" />
+                                    <f:selectItems value="#{phongBanController.mlstChuyenNganhs}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenNganh}" itemValue="#{ettChuyenNganh.id}" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <center>
+                                <p:commandButton value="Đồng ý" process="@this, opnDetail" update="opnMain, :form_main:messages" rendered="#{not phongBanController.isView}" actionListener="#{phongBanController.handSave()}" />
+                                <p:commandButton value="Quay lại" process="@this" update="opnMain" actionListener="#{phongBanController.handCancel()}"/>
+                            </center> 
+                        </p:panel>
+                        <p:panel header="Thông tin chi tiết nhân viên" rendered="#{phongBanController.isNhanVien}">
+                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel value="Tên phòng" />
+                                <p:outputLabel value="#{phongBanController.getTenPhongTheoId(phongBanController.nhanVien.idPhong)}" />
+
+                                <p:outputLabel value="Tên nhân viên" for="tenNV"/>
+                                <p:inputText value="#{phongBanController.nhanVien.ten}" id="tenNV" required="true" requiredMessage="Tên nhân viên bắt buộc nhập"/>
+
+                                <p:outputLabel value="Địa chỉ" for="diaChi"/>
+                                <p:inputText value="#{phongBanController.nhanVien.diaChi}" id="diaChi" />
+
+                                <p:outputLabel value="Lương" for="luong"/>
+                                <p:inputText value="#{phongBanController.nhanVien.luong}" id="luong" required="true" requiredMessage="Lương bắt buộc nhập"/>
+
+                                <p:outputLabel value="Ngày sinh" for="luong"/>
+                                <p:calendar value="#{phongBanController.nhanVien.ngaySinh}" id="ngaySinh" />
+
+                                <p:outputLabel value="Điện thoại" for="dienThoai"/>
+                                <p:inputText value="#{phongBanController.nhanVien.dienThoai}" id="dienThoai" />
+                            </p:panelGrid>
+                            <p:panelGrid columns="2" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-10" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel value="Ngày làm việc" for="ngayLamViec" />
+                                <p:selectManyCheckbox id="ngayLamViec" value="#{phongBanController.nhanVien.lstNgayLamViec}" >
+                                    <f:selectItems value="#{phongBanController.mlstNgayLamViec}" var="nlv" itemLabel="#{nlv.name}" itemValue="#{nlv.id}" />
+                                </p:selectManyCheckbox>
+                            </p:panelGrid>
+                            <center>
+                                <p:commandButton value="Đồng ý" process="@this, opnDetail" update="opnMain, :form_main:messages" rendered="#{not phongBanController.isView}" actionListener="#{phongBanController.handSave()}" />
+                                <p:commandButton value="Quay lại" process="@this" update="opnMain" actionListener="#{phongBanController.handCancel()}"/>
+                            </center>
+                        </p:panel>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
